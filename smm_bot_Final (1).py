@@ -1580,8 +1580,12 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
 
     print("✅ Bot চালু হয়েছে!")
-    app.run_polling(drop_pending_updates=True)
-
+    app.run_webhook(
+    listen="0.0.0.0",
+    port=8000,
+    url_path=TOKEN,
+    webhook_url="https://YOUR-REAL-URL.up.railway.app/" + TOKEN
+)
 if __name__ == "__main__":
     main()
 
