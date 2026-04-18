@@ -63,8 +63,7 @@ SERVICES = {
         "yt2": {"name": "ইউটিউব ১K Like",       "price": 50,  "min": 100, "active": True, "search": "youtube like",       "avoid": ["sub","view","comment"]},
         "yt3": {"name": "ইউটিউব ১K View",       "price": 120, "min": 100, "active": True, "search": "youtube view",       "avoid": ["sub","like","comment"]},
         "yt4": {"name": "ইউটিউব ১০০ Comment",   "price": 40,  "min": 100, "active": True, "search": "youtube comment",    "avoid": ["sub","like","view"]},
-
-}},
+    }},
     "instagram": {"name": "📸 ইন্সটাগ্রাম", "active": True, "list": {
         "ig1": {"name": "ইন্সটাগ্রাম ১K Follower", "price": 180, "min": 100,   "active": True, "search": "instagram follower",  "avoid": ["view","like","comment"]},
         "ig2": {"name": "ইন্সটাগ্রাম ১০K View",    "price": 12,  "min": 1000,  "active": True, "search": "instagram view reel", "avoid": ["follow","like","comment"]},
@@ -130,8 +129,7 @@ def find_by_name(query):
     try:
         if not SMM_CACHE:
             get_smm_services()
-
-results = []
+        results = []
         for svc in SMM_CACHE.values():
             if query.lower() in svc.get("name","").lower():
                 results.append(svc)
@@ -241,8 +239,7 @@ async def process_order(context, uid, sdata, skey, qty, link):
     sid, smm_rate = find_best_id(sdata["search"], sdata["avoid"])
     actual_cost = 0.0
     if sid and smm_rate:
-
-smm_bdt = round(smm_rate * 110, 2)
+        smm_bdt = round(smm_rate * 110, 2)
         if smm_bdt > price:
             new_price = round(smm_bdt * (1 + PROFIT_PCT/100), 2)
             for pk, pv in SERVICES.items():
@@ -331,7 +328,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return ConversationHandler.END
 
-if uid == ADMIN_ID:
+    if uid == ADMIN_ID:
         usd, bdt = get_peakerr_balance()
         await update.message.reply_text(
             f"⭐ ADMIN DASHBOARD ⭐\n"
@@ -437,7 +434,8 @@ async def select_platform(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=ReplyKeyboardMarkup(btns, resize_keyboard=True)
     )
     return S_SERVICE
-    async def select_service(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+async def select_service(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
     if text == "🔙 ব্যাক করুন":
         return await buy_service(update, context)
@@ -539,7 +537,6 @@ async def enter_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 # ===== DEPOSIT =====
-
 async def deposit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     methods = []
     if PAYMENT["bkash"]["active"]:
@@ -638,8 +635,7 @@ async def pay_method_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"💎 Binance পেমেন্ট\n"
             f"━━━━━━━━━━━━━━━━━━━━━━\n"
             f"💵 পরিমাণ: {amount:.0f} TK\n\n"
-
-f"🆔 Binance Pay ID:\n"
+            f"🆔 Binance Pay ID:\n"
             f"👉 {PAYMENT['binance']['id']}\n\n"
             f"✅ উপরের ID তে {amount:.0f} TK পাঠান।\n\n"
             f"📸 পেমেন্টের স্ক্রিনশট পাঠান:",
@@ -732,8 +728,7 @@ async def approve_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"💰 {amount:.0f} TK যোগ হয়েছে!\n"
                 f"💳 নতুন ব্যালেন্স: {u['balance']:.2f} TK\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━\n"
-
-f"এখন সার্ভিস অর্ডার করুন! 😊"
+                f"এখন সার্ভিস অর্ডার করুন! 😊"
             )
         except:
             pass
@@ -995,8 +990,7 @@ async def block_id_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("বাতিল।", reply_markup=admin_kb())
         return ConversationHandler.END
     try:
-
-uid = int(update.message.text)
+        uid = int(update.message.text)
         context.user_data["block_uid"] = uid
         u = users.get(uid, {})
         name = u.get("name", "Unknown")
@@ -1078,8 +1072,7 @@ async def refund_uid_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
     try:
         uid = int(update.message.text)
         if uid not in users:
-
-await update.message.reply_text("❌ User পাওয়া যায়নি।")
+            await update.message.reply_text("❌ User পাওয়া যায়নি।")
             return REF_UID
         context.user_data["ref_uid"] = uid
         u = users[uid]
@@ -1177,8 +1170,7 @@ async def ao_svc(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def ao_qty(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.text == "❌ বাতিল করুন":
         await update.message.reply_text("বাতিল।", reply_markup=admin_kb())
-
-return ConversationHandler.END
+        return ConversationHandler.END
     try:
         qty = int(update.message.text)
         sdata = context.user_data["ao_sdata"]
@@ -1459,8 +1451,7 @@ async def fail_order_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if action == "failrefund":
         u["balance"] += amount
         txt = (query.message.text or "") + f"\n\n✅ Refund দেওয়া হয়েছে — {amount:.2f} TK!"
-
-await query.message.edit_text(txt)
+        await query.message.edit_text(txt)
         try:
             await context.bot.send_message(uid,
                 f"💰 আপনার অর্ডারটি সম্পন্ন হয়নি।\n"
@@ -1544,8 +1535,7 @@ def main():
             CH_BKASH:   [MessageHandler(filters.TEXT & ~filters.COMMAND, change_payment)],
             CH_NAGAD:   [MessageHandler(filters.TEXT & ~filters.COMMAND, change_payment)],
             CH_BINANCE: [MessageHandler(filters.TEXT & ~filters.COMMAND, change_payment)],
-
-},
+        },
         fallbacks=[CommandHandler("start", start), MessageHandler(cancel_filter, cancel)]
     )
     list_conv = ConversationHandler(
@@ -1609,8 +1599,7 @@ def main():
     print("✅ Bot চালু হয়েছে!")
     app.run_polling(drop_pending_updates=True)
 
-if name == "main":
+if __name__ == "__main__":
     main()
 
 # This file has been patched
-    
